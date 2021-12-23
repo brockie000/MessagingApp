@@ -43,7 +43,7 @@ export default function Home({route, navigation}) {
 
             <View style={styles.searchBar}>
                 <EvilIcons name="search" size={24} color="black" />
-                <TextInput>Search</TextInput>
+                <TextInput placeholder='Search'></TextInput>
             </View>
             <FlatList 
             data={chatRooms}
@@ -58,12 +58,14 @@ export default function Home({route, navigation}) {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
+        flex: 1,
+        
     },
     top: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingHorizontal: 15,
+        paddingHorizontal: 20,
         marginTop: 15,
 
     },
@@ -84,19 +86,21 @@ const styles = StyleSheet.create({
     searchBar: {
         display: 'flex',
         flexDirection: 'row',
-        backgroundColor: 'white',
-        paddingHorizontal: 15,
+        backgroundColor: '#fff',
+        marginHorizontal: 20,
+        paddingHorizontal: 20,
         margin: 10,
         padding: 15,
-        borderRadius: 20,
+        borderRadius: 15,
         shadowColor: '#000',
-        shadowOffset:{
+        shadowOffset: {
             width: 0,
-            height: 5,
+            height: 6,
         },
-        shadowOpacity: 0.34,
-        shadowRadius: 6.27,
-        elevation: 10,
+        shadowOpacity: 0.1,
+        shadowRadius: 7,
+        
+        elevation: 9,
     }
     
 

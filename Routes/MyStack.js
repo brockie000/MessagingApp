@@ -4,8 +4,10 @@ import SecondScreen from '../Screens/SecondScreen';
 import Home from '../Screens/Home'
 import { Button } from 'react-native';
 import LoginScreen from '../Screens/LoginScreen';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const MyStack = () => {
 return (
@@ -29,7 +31,11 @@ options ={{
       ),
 }} />
 <Stack.Screen name="Second" component={SecondScreen} />
+
+
 </Stack.Navigator>
+
+
 )
 }
 export default MyStack
