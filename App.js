@@ -1,13 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { NavigationContainer } from '@react-navigation/native';
+import React from 'react';
+import MyStack from './Routes/MyStack';
+import Amplify from 'aws-amplify'
+import config from './src/aws-exports'
+
+Amplify.configure(config)
+
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+        <NavigationContainer>
+        < MyStack />
+        </NavigationContainer>
+        );
 }
 
 const styles = StyleSheet.create({
