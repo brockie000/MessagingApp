@@ -1,8 +1,8 @@
 import { DataStore } from '@aws-amplify/datastore'
+import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { Image, StyleSheet, Text, TextInput, View } from 'react-native'
-import tw from 'tailwind-react-native-classnames'
-import { ChatRoomUsers, Message } from '../src/models'
+import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ChatRoom, ChatRoomUsers, Message } from '../src/models'
 import { Users } from '../src/models'
 import test from '../assets/avatar.jpg'
 import { AntDesign } from '@expo/vector-icons';
@@ -12,6 +12,7 @@ import {img} from '../assets/index'
 export default function ChatRoomItem({chatRoom}) {
     const [users, setUsers] = useState([])
     const [message, setMessage] = useState([null])
+    const navigation = useNavigation()
 
     useEffect(() => {
         const getUsers = async () => {
@@ -27,12 +28,21 @@ export default function ChatRoomItem({chatRoom}) {
             const data = (await DataStore.query(Message)).filter(message => message.id === chatRoom.chatRoomLastMessageId)
             const test = (data.pop(1,0))
             setMessage(test)
+            
         }
         getLastMessage()
     }, [users])
 
+    const itemClicked = () => {
+        navigation.navigate('Chat', {
+            user: users,
+            ID: chatRoom.id
+        })
+    }
+
     
     return (
+        <Pressable onPress={itemClicked}>
         <View style={styles.container}>
             <View style={styles.imageContainer} >
             <Image style={styles.image} source={img}/>
@@ -52,10 +62,16 @@ export default function ChatRoomItem({chatRoom}) {
                 <Text style={styles.dateText}>
                 {moment(message?.createdAt).format('d MMM')}
                 </Text>
+                <View style={styles.newMessages}>
+                    <Text style={styles.newMessagesText}>
+                    {chatRoom?.newMessages || '0'}
+
+                    </Text>
+                </View>
                 
             </View>
         </View>
-            
+        </Pressable>
     )
 }
 
@@ -111,6 +127,20 @@ const styles = StyleSheet.create({
     dateText: {
         color: 'lightgray',
         fontSize: 12,
+    },
+    newMessages:{
+        alignSelf: 'flex-end',
+        alignItems: 'center',
+        marginTop: 4,
+        width: 20,
+        height: 20,
+        borderRadius: 50,
+        backgroundColor: 'lightblue'
+    },
+    newMessagesText:{
+        color: 'white',
+        marginTop: 1,
+        marginLeft: 1,
     }
     
 })

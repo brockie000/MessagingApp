@@ -8,6 +8,7 @@ import { ChatRoomUsers } from '../src/models';
 import ChatRoomItem from '../Components/ChatRoomItem';
 import { loadingBar } from '@aws-amplify/ui';
 import { EvilIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native'
 
 export default function Home({route, navigation}) {
     const [chatRooms, setchatRooms] = useState([])
@@ -28,13 +29,20 @@ export default function Home({route, navigation}) {
             
         }
 
+    const chats = () => {
+        navigation.navigate('Friends')
+
+    }
+
     return (
         <SafeAreaView style={styles.container}>
+            
             <View style={styles.top}>
+                
                 <Text style={styles.leftText}>
                     Chats
                 </Text>
-                <TouchableOpacity style={styles.newChat}>
+                <TouchableOpacity onPress={chats} style={styles.newChat}>
                     <Text style={styles.newChatText}>
                         New Chat
                     </Text>
@@ -77,7 +85,7 @@ const styles = StyleSheet.create({
     },
     newChat: {
         borderRadius: 30,
-        padding: 15,
+        padding: 12,
         backgroundColor: '#dff0f1'
     },
     newChatText: {

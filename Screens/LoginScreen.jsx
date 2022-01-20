@@ -29,11 +29,11 @@ export default function LoginScreen({navigation}) {
         
         
         if(!AuthUser){
-            console.log('empty')
+            
             navigation.navigate('Home')
         }
         else{
-            console.log('njd')
+            
         navigation.navigate('Home', {
             user: AuthUser
         })
@@ -47,7 +47,7 @@ export default function LoginScreen({navigation}) {
                 <Text style={tw.style('text-4xl text-white')}>Welcome Back</Text>
             </View>
             
-            <View style={tw.style('items-center border-b ')}>
+            <View style={tw.style('items-center border-b')}>
                 <TextInput 
                 placeholder="login" 
                 onChangeText={setLogin}

@@ -22,6 +22,6 @@
       }
     },
     "apiName": "MessagingApp",
-    "gqlSchemaPath": "/tmp/amplify-b394b6fa-a185-4ac5-8e5b-75e22c3223b9/amplify/backend/api/MessagingApp/schema.graphql"
+    "gqlSchemaPath": "/tmp/amplify-b50a859e-8263-4869-871b-029ce0d6dcb0/amplify/backend/api/MessagingApp/schema.graphql"
   }
 }

@@ -60,6 +60,7 @@ export declare class Users {
   readonly status?: string;
   readonly Messages?: (Message | null)[];
   readonly chatrooms?: (ChatRoomUsers | null)[];
+  readonly friends?: (string | null)[];
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<Users, UsersMetaData>);

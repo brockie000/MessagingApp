@@ -13,7 +13,7 @@ Amplify.configure(config)
 export default function App() {
   return (
         <NavigationContainer>
-        <BottomTab />
+        <MyStack />
         
         </NavigationContainer>
         );
