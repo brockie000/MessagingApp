@@ -7,6 +7,8 @@ import LoginScreen from '../Screens/LoginScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Chat from '../Screens/Chat';
 import Friends from '../Screens/Friends';
+import AddFriends from '../Screens/AddFriends';
+import Search from '../Screens/Search';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -32,8 +34,16 @@ options ={{
         />
       ),
 }} />
-<Stack.Screen name="Chat" component={Chat}  />
+<Stack.Screen name="Chat" component={Chat} options ={{
+    headerShown: false,
+    }}/>
 <Stack.Screen name="Friends" component={Friends} options ={{
+    headerShown: false,
+    }}/>
+<Stack.Screen name="Add" component={AddFriends} options ={{
+    headerShown: false,
+    }}/>
+<Stack.Screen name="Search" component={Search} options ={{
     headerShown: false,
     }}/>
 

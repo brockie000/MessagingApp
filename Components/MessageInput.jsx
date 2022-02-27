@@ -29,7 +29,7 @@ export default function MessageInput() {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'lightgray',
+        backgroundColor: '#F7F7F7',
         height: 80,
         display: 'flex',
         flexDirection: 'row'
@@ -39,9 +39,9 @@ const styles = StyleSheet.create({
         marginLeft: 15,
     },
     input:{
-        backgroundColor: 'white',
-        marginHorizontal: 10,
-        marginVertical: 12,
+        backgroundColor: 'gray',
+        marginHorizontal: 20,
+        marginVertical: 20,
         flex: 1,
         borderRadius: 20,
     }

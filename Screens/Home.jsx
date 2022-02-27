@@ -18,8 +18,9 @@ export default function Home({route, navigation}) {
 
     useEffect(() => {
         const getChatRooms = async () => {
-            const data = (await DataStore.query(ChatRoomUsers)).filter(chatRoomUsers => chatRoomUsers.users.id === '7fafaec5-ecda-41fb-96b4-499030320f5d')
+            const data = (await DataStore.query(ChatRoomUsers)).filter(chatRoomUsers => (chatRoomUsers.users.id === '7fafaec5-ecda-41fb-96b4-499030320f5d') && (chatRoomUsers.chatroom.messages != null))
             .map(chatRoomUsers => chatRoomUsers.chatroom)
+            console.log(data)
             setchatRooms(data)
         }
         getChatRooms()
@@ -51,7 +52,10 @@ export default function Home({route, navigation}) {
 
             <View style={styles.searchBar}>
                 <EvilIcons name="search" size={24} color="black" />
-                <TextInput placeholder='Search'></TextInput>
+                <TextInput 
+                style={{width: '100%'}}
+                placeholder='Search'>
+                </TextInput>
             </View>
             <FlatList 
             data={chatRooms}

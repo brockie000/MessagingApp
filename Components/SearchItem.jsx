@@ -1,23 +1,44 @@
-import { DataStore } from 'aws-amplify'
 import React, { useEffect, useState } from 'react'
 import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { ChatRoomUsers, Users } from '../src/models'
 import {img} from '../assets/index'
-import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import { DataStore } from 'aws-amplify';
+import { Users } from '../src/models';
+import { FriendRequestsUsers } from '../src/models';
+import { ChatRoomUsers } from '../src/models';
 
-export default function FriendsItem({chatRoom}) {
-    const [user, setUser] = useState()
+export default function SearchItem({user}) {
+    const [request, setRequest] = useState(false)
+    const [outgoing, setOutgoing] = useState([])
 
     useEffect(() => {
-        const getUsers = async () => {
-            const data = (await DataStore.query(ChatRoomUsers)).filter(users => users.chatroom.id === chatRoom.id).map(ChatRoomUsers => ChatRoomUsers.users)
-            setUser(data.find(users => users.id !== '7fafaec5-ecda-41fb-96b4-499030320f5d') || null);
+        const getState = async () => {
+            const data = await DataStore.query(FriendRequestsUsers)
+            const test1 = await DataStore.query(ChatRoomUsers)
+            const test = (data.pop(1,0))
+            const data1 = data.pop(0,1)
+            setOutgoing(test)
+            console.log(outgoing)
+            outgoing.forEach(
+                console.log(outgoing.users.id)
+            );
+            //console.log(test1)
+            //test needs to be changed to usernames
+            /*if(test.includes('test')){
+                setRequest(true)
+            }*/
         }
-        getUsers()
-    }, [])
+        getState()
+    }, []) 
+
+    const addFriend = async () => {
+        const original = await DataStore.query(Users, user.id);
+        console.log(original)
+        setRequest(true)
+        
+    }
 
     return (
-            <Pressable >
         <View style={styles.container}>
             <View style={styles.imageContainer} >
             <Image style={styles.image} source={img}/>
@@ -25,23 +46,18 @@ export default function FriendsItem({chatRoom}) {
 
             <View style={styles.middleContainer}>
                 <Text style={styles.userName}>
-                    {user?.name}
+                    {user.name}
                 </Text>
-
-                <Text style={styles.content}>
-                    {user?.status}
-                </Text>
-                
-                
             </View>
 
             <View style={styles.date}> 
-            <TouchableOpacity style={styles.newChat}>     
-                <MaterialIcons name="more-horiz" size={35} color="black" />
+            <TouchableOpacity style={styles.newChat} onPress={addFriend}>     
+                {request?  <Ionicons name="arrow-forward-circle" size={24} color="black" /> : <Ionicons name="person-add" size={24} color="black" />}
+                
             </TouchableOpacity>
             </View>
+
         </View>
-        </Pressable>
     )
 }
 
@@ -82,7 +98,7 @@ const styles = StyleSheet.create({
         
     },
     userName: {
-        marginTop: 10,
+        marginTop: 27.5,
         fontSize: 18,
         color: '#585E5C',
         fontWeight: '600',   
@@ -92,7 +108,8 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     date: {
-        marginTop: 20,
+        marginTop: 25.5,
+        marginRight: 10,
     }
     
 })

@@ -1,6 +1,6 @@
 import { DataStore } from 'aws-amplify';
 import React, { useEffect, useState } from 'react'
-import { FlatList, KeyboardAvoidingView, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { FlatList, KeyboardAvoidingView, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
 import ChatRoomFriend from '../Components/ChatRoomFriend';
 import MessageInput from '../Components/MessageInput';
 import Messages from '../Components/Messages';
@@ -13,6 +13,7 @@ export default function Chat({route}) {
 
     const [messages, setMessages] = useState([]);
     const [chatRoom, setChatRoom] = useState(null);
+    const [messageinput, setMessageInput] = useState(null)
 
     useEffect(() => {
         fetchChatRooms()
@@ -44,40 +45,54 @@ export default function Chat({route}) {
         const fetchedMessages = await (await DataStore.query(MessageModel)).filter(messages => messages.chatroomID == ID)
         setMessages(fetchedMessages);
     }
+    const messageInput = () => {
+        console.log('pressed')
+        setMessageInput(true)
+    }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{flex: 1}}>
+            
           
             <View>
                 <ChatRoomFriend friend={user}/>
             </View>
 
+            <KeyboardAvoidingView  behavior='padding'>
+
             <View style={styles.chatContainer}>
 
-                <View style={styles.messages}>
+                <View style={[styles.messages, {
+                    
+                }]}>
         
                     <FlatList
                     
                     data={messages}
                     renderItem={({item}) => <Messages message={item} />}
+                    inverted
                     />
                 </View>
             
 
-                <View style={styles.input}>
+                <View style={[styles.input, {
+                    marginBottom: messageinput ? '0%' : '0%'
+                }]}>
+
+                    <Pressable onPress={messageInput}>
                     <MessageInput/>
-                   
-     
+                    </Pressable>
+                
                 </View>
             </View>
-  
+            </KeyboardAvoidingView>
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
         chatContainer: {
-            height: '90%',
+            height: '96.17%',
             justifyContent:'space-between'
         },
         messages: {

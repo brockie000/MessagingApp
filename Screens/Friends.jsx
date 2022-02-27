@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Pressable, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { DataStore } from 'aws-amplify';
-import { Users } from '../src/models';
+import { ChatRoomUsers, Users } from '../src/models';
 import FriendsItem from '../Components/FriendsItem';
 
-export default function Friends() {
+export default function Friends({navigation}) {
     const [friends, setFriends] = useState([])
 
     useEffect(() => {
-        const getFriends = async () => {
-            const friends = (await DataStore.query(Users)).filter(users => users.id === '7fafaec5-ecda-41fb-96b4-499030320f5d').map(Users => Users.friends)
-            const data = (friends.pop(1,0))
+        const getChatRooms = async () => {
+            const data = (await DataStore.query(ChatRoomUsers)).filter(chatRoomUsers => (chatRoomUsers.users.id === '7fafaec5-ecda-41fb-96b4-499030320f5d'))
+            .map(chatRoomUsers => chatRoomUsers.chatroom)
             setFriends(data)
         }
-        getFriends()
+        getChatRooms()
     }, [])
+
+    const newFriend = () => {
+        navigation.navigate('Add')
+    }
     return (
         <SafeAreaView>
             <View style={styles.top}>
@@ -24,15 +28,19 @@ export default function Friends() {
                     Friends
                 </Text>
 
-                <TouchableOpacity style={styles.newChat}>
+  
+                <TouchableOpacity onPress={newFriend} style={styles.newChat}>
                     <Ionicons name="person-add" size={24} color="black" />
                 </TouchableOpacity>
              
             </View>
+            <View style={styles.requests} >
+                <Text>Friend Requests</Text>
+            </View>
 
             <FlatList 
             data={friends}
-            renderItem={({ item }) => <FriendsItem friend={item} />}
+            renderItem={({ item }) => <FriendsItem chatRoom={item} />}
             />
         </SafeAreaView>
     )
@@ -65,6 +73,10 @@ const styles = StyleSheet.create({
     },
     newChatText: {
         color: '#57726F'
+    },
+    requests: {
+        height: 25,
+        backgroundColor: 'red',
     }
 
 })
