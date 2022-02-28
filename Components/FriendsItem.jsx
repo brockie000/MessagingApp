@@ -4,8 +4,10 @@ import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'reac
 import { ChatRoomUsers, Users } from '../src/models'
 import {img} from '../assets/index'
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native'
 
 export default function FriendsItem({chatRoom}) {
+    const navigation = useNavigation()
     const [user, setUser] = useState()
 
     useEffect(() => {
@@ -16,8 +18,15 @@ export default function FriendsItem({chatRoom}) {
         getUsers()
     }, [])
 
+    const onPress = () => {
+        navigation.navigate('Chat', {
+            user: user,
+            ID: chatRoom.id
+        })
+    }
+
     return (
-            <Pressable >
+            <Pressable onPress={onPress}>
         <View style={styles.container}>
             <View style={styles.imageContainer} >
             <Image style={styles.image} source={img}/>

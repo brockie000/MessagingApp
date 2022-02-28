@@ -1,4 +1,4 @@
-import { DataStore } from 'aws-amplify';
+import { DataStore, SortDirection } from 'aws-amplify';
 import React, { useEffect, useState } from 'react'
 import { FlatList, KeyboardAvoidingView, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
 import ChatRoomFriend from '../Components/ChatRoomFriend';
@@ -13,7 +13,17 @@ export default function Chat({route}) {
 
     const [messages, setMessages] = useState([]);
     const [chatRoom, setChatRoom] = useState(null);
-    const [messageinput, setMessageInput] = useState(null)
+
+    useEffect(() => {
+        const subscription = DataStore.observe(MessageModel).subscribe((msg) => {
+          // console.log(msg.model, msg.opType, msg.element);
+          if (msg.model === MessageModel && msg.opType === "INSERT") {
+            setMessages((existingMessage) => [msg.element, ...existingMessage]);
+          }
+        });
+    
+        return () => subscription.unsubscribe();
+      }, []);
 
     useEffect(() => {
         fetchChatRooms()
@@ -69,19 +79,17 @@ export default function Chat({route}) {
                     <FlatList
                     
                     data={messages}
-                    renderItem={({item}) => <Messages message={item} />}
-                    inverted
+                    renderItem={({item}) => <Messages newmessage={item} />}
+                    
                     />
                 </View>
             
 
-                <View style={[styles.input, {
-                    marginBottom: messageinput ? '0%' : '0%'
-                }]}>
+                <View style={styles.input}>
 
-                    <Pressable onPress={messageInput}>
-                    <MessageInput/>
-                    </Pressable>
+      
+                    <MessageInput chatroom={chatRoom} friend={user}/>
+
                 
                 </View>
             </View>

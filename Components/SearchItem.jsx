@@ -18,10 +18,8 @@ export default function SearchItem({user}) {
             const test = (data.pop(1,0))
             const data1 = data.pop(0,1)
             setOutgoing(test)
-            console.log(outgoing)
-            outgoing.forEach(
-                console.log(outgoing.users.id)
-            );
+            console.log(data1)
+            
             //console.log(test1)
             //test needs to be changed to usernames
             /*if(test.includes('test')){
