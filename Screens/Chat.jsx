@@ -8,8 +8,9 @@ import { Message as MessageModel } from '../src/models';
 import { ChatRoom } from '../src/models';
 
 export default function Chat({route}) {
-    const {user} = route.params;
+    const {friend} = route.params;
     const {ID} = route.params;
+    const {AuthUser} = route.params;
 
     const [messages, setMessages] = useState([]);
     const [chatRoom, setChatRoom] = useState(null);
@@ -52,67 +53,37 @@ export default function Chat({route}) {
         if(!chatRoom){
             return;
         }
-        const fetchedMessages = await (await DataStore.query(MessageModel)).filter(messages => messages.chatroomID == ID)
-        setMessages(fetchedMessages);
-    }
-    const messageInput = () => {
-        console.log('pressed')
-        setMessageInput(true)
-    }
+        //const fetchedMessages = await (await DataStore.query(MessageModel)).filter(messages => messages.chatroomID == ID)
+        const fetchedMessages = await DataStore.query(
+            MessageModel,
+            (message) => message.chatroomID("eq", chatRoom?.id),
+            {
+              sort: (message) => message.createdAt(SortDirection.DESCENDING),
+            }
+          );
+          setMessages(fetchedMessages);
+        };
+    
+    
 
     return (
         <SafeAreaView style={{flex: 1}}>
             
+        <ChatRoomFriend friend={friend}/>
           
-            <View>
-                <ChatRoomFriend friend={user}/>
-            </View>
-
-            <KeyboardAvoidingView  behavior='padding'>
-
-            <View style={styles.chatContainer}>
-
-                <View style={[styles.messages, {
-                    
-                }]}>
+        <FlatList
+        data={messages}
+        renderItem={({item}) => <Messages friend={friend} newmessage={item} />}
+        inverted
+         />
         
-                    <FlatList
-                    
-                    data={messages}
-                    renderItem={({item}) => <Messages newmessage={item} />}
-                    
-                    />
-                </View>
-            
-
-                <View style={styles.input}>
-
-      
-                    <MessageInput chatroom={chatRoom} friend={user}/>
-
-                
-                </View>
-            </View>
-            </KeyboardAvoidingView>
+        <MessageInput chatroom={chatRoom} AuthUser={AuthUser} friend={friend}/>
+        
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
-        chatContainer: {
-            height: '96.17%',
-            justifyContent:'space-between'
-        },
-        messages: {
-            marginBottom: 80,
-            width: '100%',
-            position: 'absolute',
-            bottom: 0,
-        },
-        input: {
-            width: '100%',
-            position: 'absolute',
-            bottom: 0,
-        }
+       
         
 })

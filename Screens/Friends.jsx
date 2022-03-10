@@ -5,13 +5,16 @@ import { DataStore } from 'aws-amplify';
 import { ChatRoomUsers, Users } from '../src/models';
 import FriendsItem from '../Components/FriendsItem';
 
-export default function Friends({navigation}) {
+export default function Friends({navigation, route}) {
     const [friends, setFriends] = useState([])
+
+    const {AuthUser} = route.params || null;
 
     useEffect(() => {
         const getChatRooms = async () => {
-            const data = (await DataStore.query(ChatRoomUsers)).filter(chatRoomUsers => (chatRoomUsers.users.id === '7fafaec5-ecda-41fb-96b4-499030320f5d'))
-            .map(chatRoomUsers => chatRoomUsers.chatroom)
+            console.log(AuthUser)
+            const data = (await DataStore.query(ChatRoomUsers)).filter(chatRoomUsers => chatRoomUsers.users.id === AuthUser.id)
+            .map(chatRoomUsers => chatRoomUsers.chatRoom)
             setFriends(data)
         }
         getChatRooms()
@@ -20,6 +23,11 @@ export default function Friends({navigation}) {
     const newFriend = () => {
         navigation.navigate('Add')
     }
+
+    const Requests = () => {
+        navigation.navigate('Requests')
+    }
+
     return (
         <SafeAreaView>
             <View style={styles.top}>
@@ -34,13 +42,15 @@ export default function Friends({navigation}) {
                 </TouchableOpacity>
              
             </View>
-            <View style={styles.requests} >
-                <Text>Friend Requests</Text>
-            </View>
+            <Pressable onPress={Requests}>
+                <View style={styles.requests}>
+                    <Text>Friend Requests</Text>
+                </View>
+            </Pressable>
 
             <FlatList 
             data={friends}
-            renderItem={({ item }) => <FriendsItem chatRoom={item} />}
+            renderItem={({ item }) => <FriendsItem AuthUser={AuthUser} chatRoom={item} />}
             />
         </SafeAreaView>
     )

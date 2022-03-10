@@ -13,7 +13,7 @@ export default function ChatRoomFriend({friend}) {
 
             <View style={styles.middleContainer}>
                 <Text style={styles.userName}>
-                    {friend.name}
+                    {friend?.name}
                 </Text>
 
                 <Text style={styles.lastSeen}>
@@ -23,11 +23,11 @@ export default function ChatRoomFriend({friend}) {
 
             <View style={styles.callButtons}>
                 <View>
-                    <Foundation name="video" size={24} color="black" />
+                    <Foundation name="video" size={30} color="black" />
                 </View>
 
-                <View>
-                    <FontAwesome name="phone"  size={18} color="black" />
+                <View style={styles.phone}>
+                    <FontAwesome name="phone"  size={24} color="black" />
                 </View>
                 
             </View>
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
         borderRadius: 50
     },
     middleContainer: {
+        marginTop: 6,
         flex: 3,
     },
     userName: {
@@ -82,6 +83,10 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         marginTop: 25,
+    },
+    phone: {
+        marginTop: 4,
+        marginLeft: 15,
     }
     
    

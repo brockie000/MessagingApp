@@ -5,15 +5,19 @@ import { useState } from 'react/cjs/react.development';
 import { DataStore } from 'aws-amplify';
 import { Users } from '../src/models';
 import SearchItem from '../Components/SearchItem';
+import { FriendRequests } from '../src/models';
 
 export default function Search() {
     const [search, setSearch] = useState(null)
     const [users, setUsers] = useState([])
+    const [req, setReq] = useState([])
     
     useEffect(() => {
         const getUsers = async () => {
             const data = (await DataStore.query(Users)).filter(users => users.name === search)
+            const requests = await DataStore.query(FriendRequests)
             setUsers(data)
+            setReq(requests)
         }
         getUsers()
     }, [search])
@@ -38,7 +42,7 @@ export default function Search() {
 
             <FlatList
                 data={users}
-                renderItem={({ item }) => <SearchItem user={item} />}
+                renderItem={({ item }) => <SearchItem req={req} user={item} />}
             />
 
           

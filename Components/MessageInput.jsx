@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
 import {
     SimpleLineIcons,
@@ -13,7 +13,7 @@ import { DataStore } from 'aws-amplify';
 
  
 
-export default function MessageInput({friend, chatroom}) {
+export default function MessageInput({friend, chatroom, AuthUser}) {
     const [message, setMessage] = useState("");
 
     const sendMessage = async () => {
@@ -21,7 +21,7 @@ export default function MessageInput({friend, chatroom}) {
         const newMessage = await DataStore.save(
             new Message({
               content: message, // <- this messages should be encrypted
-              usersID: "7fafaec5-ecda-41fb-96b4-499030320f5d",
+              usersID: AuthUser.id,
               chatroomID: chatroom.id,
             })
           );
@@ -37,13 +37,22 @@ export default function MessageInput({friend, chatroom}) {
     }
 
     const sendButton = () => {
+        if(!message){
+           console.log(chatroom.id)
+            return
+        }else{
+
+        
         sendMessage()
         updateChatroom()
         setMessage("")
+        }
     }
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={100}>
 
             <View style={styles.buttons}>
                 <FontAwesome name="camera" size={24} color="black" />
@@ -54,9 +63,6 @@ export default function MessageInput({friend, chatroom}) {
             onChangeText={setMessage}
             placeholder="Enter Message..."
             />
-                    
-                
-       
 
             <View>
             <Pressable onPress={sendButton} style={styles.buttonContainer}>
@@ -69,17 +75,18 @@ export default function MessageInput({friend, chatroom}) {
             </View>
             
             
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#F7F7F7',
-        height: 80,
+        height: 'auto',
         display: 'flex',
         flexDirection: 'row',
-        borderColor: '#dedede'
+        borderColor: '#dedede',
+        marginBottom: 1,
     },
     buttons: {
         marginTop: 23,

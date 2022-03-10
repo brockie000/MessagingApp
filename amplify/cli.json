@@ -4,13 +4,13 @@
             "addmissingownerfields": true,
             "improvepluralization": false,
             "validatetypenamereservedwords": true,
-            "useexperimentalpipelinedtransformer": false,
+            "useexperimentalpipelinedtransformer": true,
             "enableiterativegsiupdates": true,
             "secondarykeyasgsi": true,
             "skipoverridemutationinputtypes": true,
-            "transformerversion": 1,
+            "transformerversion": 2,
             "suppressschemamigrationprompt": true,
-            "securityEnhancementNotification": false,
+            "securityenhancementnotification": false,
             "showfieldauthnotification": false
         },
         "frontend-ios": {

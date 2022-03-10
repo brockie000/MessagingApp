@@ -4,35 +4,43 @@ import {img} from '../assets/index'
 import { Ionicons } from '@expo/vector-icons';
 import { DataStore } from 'aws-amplify';
 import { Users } from '../src/models';
-import { FriendRequestsUsers } from '../src/models';
-import { ChatRoomUsers } from '../src/models';
+import { FriendRequests } from '../src/models';
+
+
 
 export default function SearchItem({user}) {
     const [request, setRequest] = useState(false)
-    const [outgoing, setOutgoing] = useState([])
 
     useEffect(() => {
         const getState = async () => {
-            const data = await DataStore.query(FriendRequestsUsers)
-            const test1 = await DataStore.query(ChatRoomUsers)
-            const test = (data.pop(1,0))
-            const data1 = data.pop(0,1)
-            setOutgoing(test)
-            console.log(data1)
             
-            //console.log(test1)
-            //test needs to be changed to usernames
-            /*if(test.includes('test')){
-                setRequest(true)
-            }*/
+            const data = (await DataStore.query(FriendRequests)).filter(requests => requests.fromUserID === '7fafaec5-ecda-41fb-96b4-499030320f5d').map(req => req.Users)
+            console.log('hgvhj',data)
+            data.forEach(element => {
+                if(element?.name === user.name){
+                    console.log(element)
+                    setRequest(true)
+                }
+            });
         }
         getState()
     }, []) 
 
     const addFriend = async () => {
-        const original = await DataStore.query(Users, user.id);
-        console.log(original)
-        setRequest(true)
+        if(!request){
+            setRequest(true)
+            const dbUser = await DataStore.query(Users, user.id)
+            await DataStore.save(
+                new FriendRequests({
+                    fromUserID: '7fafaec5-ecda-41fb-96b4-499030320f5d',
+                    Users: user
+                })
+            )
+        }else{
+            
+            setRequest(false)
+        }
+        
         
     }
 

@@ -6,21 +6,21 @@ import {img} from '../assets/index'
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native'
 
-export default function FriendsItem({chatRoom}) {
+export default function FriendsItem({chatRoom, AuthUser}) {
     const navigation = useNavigation()
-    const [user, setUser] = useState()
+    const [friend, setFriend] = useState()
 
     useEffect(() => {
         const getUsers = async () => {
-            const data = (await DataStore.query(ChatRoomUsers)).filter(users => users.chatroom.id === chatRoom.id).map(ChatRoomUsers => ChatRoomUsers.users)
-            setUser(data.find(users => users.id !== '7fafaec5-ecda-41fb-96b4-499030320f5d') || null);
+            const data = (await DataStore.query(ChatRoomUsers)).filter(users => users.chatRoom.id === chatRoom.id).map(ChatRoomUsers => ChatRoomUsers.users)
+            setFriend(data.find(users => users.id != AuthUser.id) || null);
         }
         getUsers()
     }, [])
 
     const onPress = () => {
         navigation.navigate('Chat', {
-            user: user,
+            friend: friend,
             ID: chatRoom.id
         })
     }
@@ -34,11 +34,11 @@ export default function FriendsItem({chatRoom}) {
 
             <View style={styles.middleContainer}>
                 <Text style={styles.userName}>
-                    {user?.name}
+                    {friend?.name}
                 </Text>
 
                 <Text style={styles.content}>
-                    {user?.status}
+                    {friend?.status}
                 </Text>
                 
                 

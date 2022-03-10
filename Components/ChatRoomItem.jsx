@@ -9,19 +9,22 @@ import { AntDesign } from '@expo/vector-icons';
 import moment from 'moment'
 import {img} from '../assets/index'
 
-export default function ChatRoomItem({chatRoom}) {
-    const [users, setUsers] = useState([])
+export default function ChatRoomItem({chatRoom, AuthUser}) {
+    const [friend, setFriend] = useState([])
     const [message, setMessage] = useState([null])
     const navigation = useNavigation()
 
     useEffect(() => {
         const getUsers = async () => {
-            const data = (await DataStore.query(ChatRoomUsers)).filter(users => users.chatroom.id === chatRoom.id).map(ChatRoomUsers => ChatRoomUsers.users)
-            setUsers(data.find(users => users.id !== '7fafaec5-ecda-41fb-96b4-499030320f5d') || null);
+            
+            const data = (await DataStore.query(ChatRoomUsers)).filter(users => users.chatRoom.id === chatRoom.id).map(ChatRoomUsers => ChatRoomUsers.users)
+            setFriend(data.find(users => users.id != AuthUser.id) || null);
             
         }
         getUsers()
     }, [])
+
+    
 
     useEffect(() => {
         const getLastMessage = async () => {
@@ -31,11 +34,12 @@ export default function ChatRoomItem({chatRoom}) {
             
         }
         getLastMessage()
-    }, [users])
+    }, [friend])
 
     const itemClicked = () => {
         navigation.navigate('Chat', {
-            user: users,
+            friend: friend,
+            AuthUser: AuthUser,
             ID: chatRoom.id
         })
     }
@@ -50,7 +54,7 @@ export default function ChatRoomItem({chatRoom}) {
 
             <View style={styles.middleContainer}>
                 <Text style={styles.userName}>
-                    {users.name}
+                    {friend?.name}
                 </Text>
                 
                 <Text style={styles.content}>

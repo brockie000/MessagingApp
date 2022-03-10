@@ -9,6 +9,8 @@ import Chat from '../Screens/Chat';
 import Friends from '../Screens/Friends';
 import AddFriends from '../Screens/AddFriends';
 import Search from '../Screens/Search';
+import SignUp from '../Screens/SignUp';
+import Requests from '../Screens/Requests';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -17,6 +19,10 @@ const MyStack = () => {
 return (
 <Stack.Navigator>
 <Stack.Screen name="Login" component={LoginScreen}
+options={{
+    headerShown: false,
+}}/>
+<Stack.Screen name="SignUp" component={SignUp}
 options={{
     headerShown: false,
 }}/>
@@ -44,6 +50,9 @@ options ={{
     headerShown: false,
     }}/>
 <Stack.Screen name="Search" component={Search} options ={{
+    headerShown: false,
+    }}/>
+<Stack.Screen name="Requests" component={Requests} options ={{
     headerShown: false,
     }}/>
 
